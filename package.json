@@ -1,0 +1,28 @@
+{
+  "name": "paisa-pilot",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Gen Z personal finance simulator: survive a \u20b910,000 month with connected, simulated decisions.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "npm run test:unit && npm run test:ui",
+    "test:unit": "node --test src/lib/finance.test.js src/lib/sanitize.test.js src/state/reducer.test.js",
+    "test:ui": "vitest run"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@vitejs/plugin-react": "^4.3.3",
+    "jsdom": "^25.0.1",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4"
+  }
+}

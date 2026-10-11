@@ -1,0 +1,27 @@
+/* Design tokens: colours, spacing, radii. Light by default, dark via OS or manual toggle. */
+:root {
+  --bg: #f5f4fb;
+  --surface: #ffffff;
+  --text: #17142b;
+  --muted: #6a6684;
+  --border: #e4e1f2;
+  --brand: #6c4cff;
+  --brand-2: #ff4fa3;
+  --good: #0e8f5e;
+  --warn: #b97800;
+  --bad: #d22f45;
+  --focus: #6c4cff;
+  --radius: 18px;
+  --gap: 14px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f0d1c; --surface: #1a1730; --text: #f1effc; --muted: #a29fbf; --border: #2d2a4c;
+    --good: #3ddc97; --warn: #ffc247; --bad: #ff6b81; --focus: #a594ff;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f0d1c; --surface: #1a1730; --text: #f1effc; --muted: #a29fbf; --border: #2d2a4c;
+  --good: #3ddc97; --warn: #ffc247; --bad: #ff6b81; --focus: #a594ff;
+}
