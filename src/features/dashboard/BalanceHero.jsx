@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { formatINR } from '../../lib/format.js';
+import { formatINR } from '../../utils/format.js';
+import PropTypes from 'prop-types';
 
 function BalanceHero({ balance, allowance, upcoming, daysLeft }) {
   return (
@@ -23,5 +24,12 @@ function BalanceHero({ balance, allowance, upcoming, daysLeft }) {
     </section>
   );
 }
+
+BalanceHero.propTypes = {
+  balance: PropTypes.number.isRequired,
+  allowance: PropTypes.number.isRequired,
+  upcoming: PropTypes.number.isRequired,
+  daysLeft: PropTypes.number.isRequired,
+};
 
 export default memo(BalanceHero);

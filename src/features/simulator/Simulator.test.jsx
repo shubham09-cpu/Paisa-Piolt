@@ -10,7 +10,8 @@ describe('Simulator', () => {
     render(<Simulator state={state} metrics={metrics} actions={actions} onDone={() => {}} />);
     expect(screen.getByRole('table')).toBeInTheDocument();
     expect(screen.getByText('Daily allowance')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toBeInTheDocument();
+    // <output> also has the implicit status role, so find the verdict by its text instead.
+    expect(screen.getByText(/safe\.|doable|not now/i)).toBeInTheDocument();
   });
 
   it('does not change anything until Commit is pressed', async () => {

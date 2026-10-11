@@ -1,0 +1,11 @@
+{
+  "name": "Paisa Pilot",
+  "short_name": "Paisa Pilot",
+  "description": "Survive the month on ₹10,000 by previewing every money decision first.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f4fb",
+  "theme_color": "#6c4cff",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

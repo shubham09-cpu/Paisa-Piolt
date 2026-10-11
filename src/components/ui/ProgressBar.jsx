@@ -1,8 +1,11 @@
-import { clamp } from '../../lib/format.js';
+import { memo } from 'react';
+import PropTypes from 'prop-types';
+import { toneType } from '../../types.js';
+import { clamp } from '../../utils/format.js';
 
 /** Accessible progress bar (role="progressbar" with a readable label). */
-export default function ProgressBar({ value, max, label, tone = 'brand' }) {
-  const percent = clamp((value / max) * 100, 0, 100);
+function ProgressBar({ value, max, label, tone = 'brand' }) {
+  const percent = max > 0 ? clamp((value / max) * 100, 0, 100) : 0;
   return (
     <div
       className="bar"
@@ -16,3 +19,12 @@ export default function ProgressBar({ value, max, label, tone = 'brand' }) {
     </div>
   );
 }
+
+ProgressBar.propTypes = {
+  value: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  label: PropTypes.string.isRequired,
+  tone: toneType,
+};
+
+export default memo(ProgressBar);

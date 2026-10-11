@@ -1,6 +1,7 @@
 import Card from '../../components/ui/Card.jsx';
 import Switch from '../../components/ui/Switch.jsx';
-import { formatINR } from '../../lib/format.js';
+import { formatINR } from '../../utils/format.js';
+import { actionsShape, metricsShape, stateShape } from '../../types.js';
 
 export default function Subscriptions({ state, metrics, actions }) {
   return (
@@ -15,7 +16,13 @@ export default function Subscriptions({ state, metrics, actions }) {
           <ul className="list">
             {state.commitments.map((c) => (
               <li key={c.id} className="list__item">
-                <span>{c.label} <span className="muted">· day {c.day}{c.day <= state.day ? ' · paid ✓' : ''}</span></span>
+                <span>
+                  {c.label}{' '}
+                  <span className="muted">
+                    · day {c.day}
+                    {c.day <= state.day ? ' · paid ✓' : ''}
+                  </span>
+                </span>
                 <strong>{formatINR(c.amount)}</strong>
               </li>
             ))}
@@ -31,9 +38,17 @@ export default function Subscriptions({ state, metrics, actions }) {
               <li key={s.id} className="list__item">
                 <span>
                   {s.label}
-                  <span className="muted"> · {formatINR(s.amount)} · day {s.day}{s.active && s.day <= state.day ? ' · paid ✓' : ''}</span>
+                  <span className="muted">
+                    {' '}
+                    · {formatINR(s.amount)} · day {s.day}
+                    {s.active && s.day <= state.day ? ' · paid ✓' : ''}
+                  </span>
                 </span>
-                <Switch checked={s.active} label={`${s.label} subscription`} onChange={() => actions.toggleSubscription(s.id)} />
+                <Switch
+                  checked={s.active}
+                  label={`${s.label} subscription`}
+                  onChange={() => actions.toggleSubscription(s.id)}
+                />
               </li>
             ))}
           </ul>
@@ -42,3 +57,9 @@ export default function Subscriptions({ state, metrics, actions }) {
     </div>
   );
 }
+
+Subscriptions.propTypes = {
+  state: stateShape.isRequired,
+  metrics: metricsShape.isRequired,
+  actions: actionsShape.isRequired,
+};

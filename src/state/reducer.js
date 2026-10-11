@@ -1,10 +1,4 @@
-import {
-  DECISION_TYPES,
-  EMERGENCY_GOAL_ID,
-  INCOME_SOURCES,
-  SPEND_CATEGORIES,
-  TOTAL_DAYS,
-} from '../data/constants.js';
+import { DECISION_TYPES, EMERGENCY_GOAL_ID, INCOME_SOURCES, SPEND_CATEGORIES, TOTAL_DAYS } from '../data/constants.js';
 import { createInitialState } from '../data/initialState.js';
 import { applyDecision, getBillsDueToday, withTransaction } from '../lib/finance.js';
 import { parseAmount } from '../lib/sanitize.js';
@@ -36,11 +30,14 @@ export function financeReducer(state, action) {
         next = { ...next, day: next.day + 1 };
         // Charge each bill that falls due on the new day.
         getBillsDueToday(next).forEach((bill) => {
-          next = withTransaction({ ...next, balance: next.balance - bill.amount }, {
-            label: bill.label,
-            amount: bill.amount,
-            kind: 'bill',
-          });
+          next = withTransaction(
+            { ...next, balance: next.balance - bill.amount },
+            {
+              label: bill.label,
+              amount: bill.amount,
+              kind: 'bill',
+            },
+          );
         });
         const history = next.history.slice();
         history[next.day - 1] = next.balance;
@@ -74,11 +71,14 @@ export function financeReducer(state, action) {
         }
       }
       if (remaining > 0) {
-        next = withTransaction({ ...next, balance: next.balance - remaining }, {
-          label: surprise.label,
-          amount: remaining,
-          kind: 'surprise',
-        });
+        next = withTransaction(
+          { ...next, balance: next.balance - remaining },
+          {
+            label: surprise.label,
+            amount: remaining,
+            kind: 'surprise',
+          },
+        );
       }
       return next;
     }

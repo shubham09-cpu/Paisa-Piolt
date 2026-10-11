@@ -1,33 +1,42 @@
-import { useEffect, useMemo, useReducer } from 'react';
-import { SURPRISES } from '../data/constants.js';
+import { useEffect, useMemo, useReducer, useRef } from 'react';
+import { SAVE_DELAY_MS, STORAGE_KEYS, SURPRISES } from '../data/constants.js';
 import { createInitialState } from '../data/initialState.js';
 import { computeMetrics } from '../lib/finance.js';
 import { sanitizeState } from '../lib/sanitize.js';
+import { storage } from '../services/storage.js';
 import { financeReducer } from '../state/reducer.js';
-
-const STORAGE_KEY = 'paisa-pilot:v1';
 
 /** Restore saved progress. Saved data is untrusted, so it is sanitised first. */
 function loadState() {
-  try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    return saved ? sanitizeState(JSON.parse(saved)) : createInitialState();
-  } catch {
-    return createInitialState();
-  }
+  const saved = storage.read(STORAGE_KEYS.state);
+  return saved ? sanitizeState(saved) : createInitialState();
 }
 
-/** Single entry point for app state, derived metrics and actions. */
+/**
+ * Single entry point for app state, derived metrics and actions.
+ *
+ * - State lives in one reducer (`state/reducer.js`).
+ * - Metrics are derived with `computeMetrics` and memoised.
+ * - Persistence is debounced so rapid interactions (e.g. dragging a slider that dispatches) cause one write,
+ *   and the latest state is flushed when the tab is hidden or closed.
+ *
+ * @returns {{ state: object, metrics: object, actions: Record<string, Function> }}
+ */
 export function useFinance() {
   const [state, dispatch] = useReducer(financeReducer, undefined, loadState);
+  const latest = useRef(state);
+  latest.current = state;
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {
-      /* storage unavailable: the app still works in memory */
-    }
+    const timer = setTimeout(() => storage.write(STORAGE_KEYS.state, state), SAVE_DELAY_MS);
+    return () => clearTimeout(timer);
   }, [state]);
+
+  useEffect(() => {
+    const flush = () => storage.write(STORAGE_KEYS.state, latest.current);
+    window.addEventListener('pagehide', flush);
+    return () => window.removeEventListener('pagehide', flush);
+  }, []);
 
   const metrics = useMemo(() => computeMetrics(state), [state]);
 
@@ -47,5 +56,5 @@ export function useFinance() {
     [],
   );
 
-  return { state, metrics, actions };
+  return useMemo(() => ({ state, metrics, actions }), [state, metrics, actions]);
 }

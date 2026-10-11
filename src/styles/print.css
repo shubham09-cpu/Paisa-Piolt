@@ -1,0 +1,35 @@
+/* Print: drop navigation and decoration so a month summary prints cleanly. */
+@media print {
+  .nav,
+  .toasts,
+  .skip-link,
+  .btn,
+  .chips,
+  form,
+  .shell__header button {
+    display: none !important;
+  }
+  .shell {
+    display: block;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .card,
+  .hero {
+    box-shadow: none;
+    animation: none;
+    break-inside: avoid;
+    border: 1px solid #999;
+    background: #fff;
+    color: #000;
+  }
+  .hero {
+    background: #fff;
+  }
+  .shell__main {
+    max-width: none;
+    padding: 0;
+  }
+}

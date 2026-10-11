@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import Card from '../../components/ui/Card.jsx';
 import { buildCoachTip } from '../../lib/finance.js';
+import { metricsShape } from '../../types.js';
 
 function CoachTip({ metrics }) {
   const tip = buildCoachTip(metrics);
@@ -13,5 +14,7 @@ function CoachTip({ metrics }) {
     </Card>
   );
 }
+
+CoachTip.propTypes = { metrics: metricsShape.isRequired };
 
 export default memo(CoachTip);

@@ -5,7 +5,11 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: 'es2020',
-    // Keep React in its own long-cacheable chunk; screens are split via React.lazy in App.jsx.
+    cssCodeSplit: true,
+    sourcemap: false,
+    // Warn early if a chunk grows past 150 kB (uncompressed).
+    chunkSizeWarningLimit: 150,
+    // Keep React in its own long-cacheable chunk; screens are split via React.lazy in src/routes/index.jsx.
     rollupOptions: { output: { manualChunks: { react: ['react', 'react-dom'] } } },
   },
   test: {

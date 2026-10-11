@@ -20,8 +20,11 @@ export function parseAmount(input, { max = MAX_AMOUNT } = {}) {
 /** Strip angle brackets / control characters and cap length. */
 export function cleanText(value, fallback = '') {
   if (typeof value !== 'string') return fallback;
-  // eslint-disable-next-line no-control-regex
-  const cleaned = value.replace(/[<>\u0000-\u001f]/g, '').trim().slice(0, 60);
+  const cleaned = value
+    // eslint-disable-next-line no-control-regex
+    .replace(/[<>\u0000-\u001f]/g, '')
+    .trim()
+    .slice(0, 60);
   return cleaned || fallback;
 }
 

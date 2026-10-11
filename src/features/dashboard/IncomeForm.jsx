@@ -2,6 +2,7 @@ import { memo, useState } from 'react';
 import AmountForm from '../../components/ui/AmountForm.jsx';
 import Card from '../../components/ui/Card.jsx';
 import { INCOME_SOURCES } from '../../data/constants.js';
+import PropTypes from 'prop-types';
 
 /** Record extra income (gig work, pocket money…). It raises balance, allowance and forecast. */
 function IncomeForm({ onAdd }) {
@@ -11,12 +12,21 @@ function IncomeForm({ onAdd }) {
       <div className="field">
         <label htmlFor="income-source">Source</label>
         <select id="income-source" className="input" value={source} onChange={(e) => setSource(e.target.value)}>
-          {INCOME_SOURCES.map((s) => <option key={s}>{s}</option>)}
+          {INCOME_SOURCES.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
         </select>
       </div>
-      <AmountForm id="income-amount" label="Income amount in rupees" submitLabel="Add" onSubmit={(amount) => onAdd(amount, source)} />
+      <AmountForm
+        id="income-amount"
+        label="Income amount in rupees"
+        submitLabel="Add"
+        onSubmit={(amount) => onAdd(amount, source)}
+      />
     </Card>
   );
 }
+
+IncomeForm.propTypes = { onAdd: PropTypes.func.isRequired };
 
 export default memo(IncomeForm);

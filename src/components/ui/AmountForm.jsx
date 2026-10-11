@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { parseAmount } from '../../lib/sanitize.js';
 
 /**
@@ -24,7 +25,9 @@ export default function AmountForm({ id, label, submitLabel, onSubmit, primary =
   return (
     <form onSubmit={handleSubmit} noValidate>
       <div className="inline">
-        <label className="sr-only" htmlFor={id}>{label}</label>
+        <label className="sr-only" htmlFor={id}>
+          {label}
+        </label>
         <input
           id={id}
           className="input"
@@ -37,9 +40,24 @@ export default function AmountForm({ id, label, submitLabel, onSubmit, primary =
           aria-invalid={error ? 'true' : undefined}
           aria-describedby={error ? `${id}-error` : undefined}
         />
-        <button type="submit" className={`btn ${primary ? 'btn--primary' : ''}`}>{submitLabel}</button>
+        <button type="submit" className={`btn ${primary ? 'btn--primary' : ''}`}>
+          {submitLabel}
+        </button>
       </div>
-      {error && <p id={`${id}-error`} role="alert" className="field-error">{error}</p>}
+      {error && (
+        <p id={`${id}-error`} role="alert" className="field-error">
+          {error}
+        </p>
+      )}
     </form>
   );
 }
+
+AmountForm.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  submitLabel: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  primary: PropTypes.bool,
+  placeholder: PropTypes.string,
+};

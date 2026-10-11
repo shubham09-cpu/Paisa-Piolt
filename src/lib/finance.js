@@ -4,7 +4,7 @@
  * is guaranteed to match what committing the decision will do.
  */
 import { BASELINE_DAILY_SPEND, SMOOTHING_DAYS, STARTING_BUDGET, TOTAL_DAYS } from '../data/constants.js';
-import { clamp } from './format.js';
+import { clamp } from '../utils/format.js';
 
 const sum = (items, pick = (x) => x) => items.reduce((total, item) => total + pick(item), 0);
 
@@ -54,8 +54,7 @@ export function computeMetrics(state) {
     (t) => t.amount,
   );
   const avgDaily =
-    (everydaySpent + BASELINE_DAILY_SPEND * SMOOTHING_DAYS) / (state.day + SMOOTHING_DAYS) +
-    state.habitPerDay;
+    (everydaySpent + BASELINE_DAILY_SPEND * SMOOTHING_DAYS) / (state.day + SMOOTHING_DAYS) + state.habitPerDay;
 
   const freeCash = state.balance - upcomingBills;
   const dailyAllowance = Math.max(0, freeCash) / daysLeft;
@@ -73,11 +72,20 @@ export function computeMetrics(state) {
     { id: 'runway', label: 'Cash runway', max: 40, points: (40 * Math.min(cover, 1.5)) / 1.5 },
     { id: 'savings', label: 'Savings progress', max: 25, points: 25 * Math.min(totalSaved / 2000, 1) },
     { id: 'subs', label: 'Subscription load', max: 15, points: 15 * (1 - clamp(subscriptionLoad / 1500, 0, 1)) },
-    { id: 'forecast', label: 'Month-end outlook', max: 20, points: 20 * (forecast >= 0 ? 1 : clamp(1 + forecast / 2000, 0, 1)) },
+    {
+      id: 'forecast',
+      label: 'Month-end outlook',
+      max: 20,
+      points: 20 * (forecast >= 0 ? 1 : clamp(1 + forecast / 2000, 0, 1)),
+    },
   ].map((part) => ({ ...part, points: Math.max(0, part.points) }));
   const health = Math.round(sum(healthParts, (p) => p.points));
 
-  const total = (kind) => sum(state.transactions.filter((t) => t.kind === kind), (t) => t.amount);
+  const total = (kind) =>
+    sum(
+      state.transactions.filter((t) => t.kind === kind),
+      (t) => t.amount,
+    );
   // Where the month's income has gone so far.
   const flow = {
     income: STARTING_BUDGET + total('income'),
@@ -112,10 +120,7 @@ export function withTransaction(state, { label, amount, kind }) {
   return {
     ...state,
     history,
-    transactions: [
-      ...state.transactions,
-      { id: state.transactions.length + 1, day: state.day, label, amount, kind },
-    ],
+    transactions: [...state.transactions, { id: state.transactions.length + 1, day: state.day, label, amount, kind }],
   };
 }
 
@@ -126,11 +131,14 @@ export function withTransaction(state, { label, amount, kind }) {
 export function applyDecision(state, { type, amount, goalId }) {
   switch (type) {
     case 'once':
-      return withTransaction({ ...state, balance: state.balance - amount }, {
-        label: 'One-time purchase',
-        amount,
-        kind: 'once',
-      });
+      return withTransaction(
+        { ...state, balance: state.balance - amount },
+        {
+          label: 'One-time purchase',
+          amount,
+          kind: 'once',
+        },
+      );
     case 'subscription': {
       const subscription = {
         id: `sub-${state.subscriptions.length + 1}`,
@@ -152,11 +160,14 @@ export function applyDecision(state, { type, amount, goalId }) {
     case 'goal': {
       const goal = state.goals.find((g) => g.id === goalId);
       const goals = state.goals.map((g) => (g.id === goalId ? { ...g, saved: g.saved + amount } : g));
-      return withTransaction({ ...state, balance: state.balance - amount, goals }, {
-        label: `Saved → ${goal ? goal.label : 'goal'}`,
-        amount,
-        kind: 'saving',
-      });
+      return withTransaction(
+        { ...state, balance: state.balance - amount, goals },
+        {
+          label: `Saved → ${goal ? goal.label : 'goal'}`,
+          amount,
+          kind: 'saving',
+        },
+      );
     }
     default:
       return state;
@@ -182,10 +193,18 @@ export function compareDecision(state, decision) {
 export function buildCoachTip(metrics) {
   const allowance = Math.round(metrics.dailyAllowance);
   if (metrics.forecast < 0)
-    return { icon: '🚨', tone: 'bad', text: `At this pace you'll finish about ₹${Math.abs(Math.round(metrics.forecast))} short. Keep daily spend near ₹${allowance} or pause a subscription.` };
+    return {
+      icon: '🚨',
+      tone: 'bad',
+      text: `At this pace you'll finish about ₹${Math.abs(Math.round(metrics.forecast))} short. Keep daily spend near ₹${allowance} or pause a subscription.`,
+    };
   if (metrics.risk >= 30)
     return { icon: '⚠️', tone: 'warn', text: `Runway is tight. Staying under ₹${allowance} a day keeps a cushion.` };
   if (metrics.totalSaved < 1500)
-    return { icon: '💡', tone: 'good', text: `You're on track with about ₹${Math.round(metrics.goalSurplus)} projected spare. Park some in your emergency fund.` };
+    return {
+      icon: '💡',
+      tone: 'good',
+      text: `You're on track with about ₹${Math.round(metrics.goalSurplus)} projected spare. Park some in your emergency fund.`,
+    };
   return { icon: '🔥', tone: 'good', text: 'Strong month. Your safety net is growing, so keep the streak going.' };
 }

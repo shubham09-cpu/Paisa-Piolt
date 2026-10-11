@@ -1,14 +1,17 @@
-import { formatINR } from '../../lib/format.js';
+import { formatINR } from '../../utils/format.js';
+import PropTypes from 'prop-types';
 
 /** Before/after rows. `lowerIsBetter` flips the good/bad colouring (e.g. risk). */
 function Row({ label, before, after, format = (v) => v, lowerIsBetter = false }) {
   const delta = after - before;
-  const tone = Math.abs(delta) < 0.5 ? '' : (delta > 0) !== lowerIsBetter ? 'tone-good' : 'tone-bad';
+  const tone = Math.abs(delta) < 0.5 ? '' : delta > 0 !== lowerIsBetter ? 'tone-good' : 'tone-bad';
   return (
     <tr>
       <th scope="row">{label}</th>
       <td>{format(before)}</td>
-      <td className={tone}><strong>{format(after)}</strong></td>
+      <td className={tone}>
+        <strong>{format(after)}</strong>
+      </td>
     </tr>
   );
 }
@@ -20,7 +23,11 @@ export default function ImpactTable({ result }) {
       <table className="table">
         <caption className="sr-only">Impact of this decision</caption>
         <thead>
-          <tr><th scope="col">Impact</th><th scope="col">Now</th><th scope="col">After</th></tr>
+          <tr>
+            <th scope="col">Impact</th>
+            <th scope="col">Now</th>
+            <th scope="col">After</th>
+          </tr>
         </thead>
         <tbody>
           <Row label="Balance" before={balanceBefore} after={balanceAfter} format={formatINR} />
@@ -34,3 +41,28 @@ export default function ImpactTable({ result }) {
     </div>
   );
 }
+
+const metricPair = PropTypes.shape({
+  dailyAllowance: PropTypes.number.isRequired,
+  forecast: PropTypes.number.isRequired,
+  goalSurplus: PropTypes.number.isRequired,
+  risk: PropTypes.number.isRequired,
+  health: PropTypes.number.isRequired,
+});
+
+Row.propTypes = {
+  label: PropTypes.string.isRequired,
+  before: PropTypes.number.isRequired,
+  after: PropTypes.number.isRequired,
+  format: PropTypes.func,
+  lowerIsBetter: PropTypes.bool,
+};
+
+ImpactTable.propTypes = {
+  result: PropTypes.shape({
+    before: metricPair.isRequired,
+    after: metricPair.isRequired,
+    balanceBefore: PropTypes.number.isRequired,
+    balanceAfter: PropTypes.number.isRequired,
+  }).isRequired,
+};

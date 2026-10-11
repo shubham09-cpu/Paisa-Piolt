@@ -6,8 +6,15 @@ import { computeMetrics } from '../lib/finance.js';
 export function setup(overrides = {}) {
   const state = { ...createInitialState(), ...overrides };
   const actions = {
-    logSpend: vi.fn(), addIncome: vi.fn(), advanceDays: vi.fn(), triggerSurprise: vi.fn(),
-    resolveSurprise: vi.fn(), toggleSubscription: vi.fn(), saveToGoal: vi.fn(), commitDecision: vi.fn(), reset: vi.fn(),
+    logSpend: vi.fn(),
+    addIncome: vi.fn(),
+    advanceDays: vi.fn(),
+    triggerSurprise: vi.fn(),
+    resolveSurprise: vi.fn(),
+    toggleSubscription: vi.fn(),
+    saveToGoal: vi.fn(),
+    commitDecision: vi.fn(),
+    reset: vi.fn(),
   };
   return { state, metrics: computeMetrics(state), actions };
 }

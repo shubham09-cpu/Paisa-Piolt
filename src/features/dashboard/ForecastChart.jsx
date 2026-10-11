@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { TOTAL_DAYS, STARTING_BUDGET } from '../../data/constants.js';
-import { formatINR } from '../../lib/format.js';
+import { formatINR } from '../../utils/format.js';
+import PropTypes from 'prop-types';
 
 const W = 340;
 const H = 120;
@@ -23,12 +24,25 @@ function ForecastChart({ history, day, balance, forecast }) {
       >
         <line x1={PAD} x2={W - PAD} y1={y(0)} y2={y(0)} className="chart__zero" />
         <polyline points={actual} className="chart__actual" />
-        <line x1={x(day)} y1={y(balance)} x2={x(TOTAL_DAYS)} y2={y(forecast)} className={`chart__proj ${bad ? 'is-bad' : ''}`} />
+        <line
+          x1={x(day)}
+          y1={y(balance)}
+          x2={x(TOTAL_DAYS)}
+          y2={y(forecast)}
+          className={`chart__proj ${bad ? 'is-bad' : ''}`}
+        />
         <circle cx={x(TOTAL_DAYS)} cy={y(forecast)} r="4.5" className={`chart__dot ${bad ? 'is-bad' : ''}`} />
       </svg>
       <figcaption className="muted">Solid: actual balance · dashed: projection to day 30</figcaption>
     </figure>
   );
 }
+
+ForecastChart.propTypes = {
+  history: PropTypes.arrayOf(PropTypes.number).isRequired,
+  day: PropTypes.number.isRequired,
+  balance: PropTypes.number.isRequired,
+  forecast: PropTypes.number.isRequired,
+};
 
 export default memo(ForecastChart);

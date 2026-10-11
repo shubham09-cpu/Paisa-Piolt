@@ -1,31 +1,39 @@
-import { lazy, Suspense, useState } from 'react';
+import { Suspense, useCallback, useEffect } from 'react';
 import AppShell from './components/layout/AppShell.jsx';
-import Dashboard from './features/dashboard/Dashboard.jsx';
-import { useFinance } from './hooks/useFinance.js';
+import Skeleton from './components/ui/Skeleton.jsx';
+import { FinanceProvider, useFinanceContext } from './context/FinanceContext.jsx';
+import { ToastProvider, useToast } from './context/ToastContext.jsx';
+import { useFeedbackActions } from './hooks/useFeedbackActions.js';
+import { useHashRoute } from './hooks/useHashRoute.js';
+import { prefetchRoutes, ROUTES } from './routes/index.jsx';
 
-// Secondary screens are code-split so the first paint only loads the dashboard.
-const Simulator = lazy(() => import('./features/simulator/Simulator.jsx'));
-const Subscriptions = lazy(() => import('./features/subscriptions/Subscriptions.jsx'));
-const Goals = lazy(() => import('./features/goals/Goals.jsx'));
-const Insights = lazy(() => import('./features/insights/Insights.jsx'));
-const Activity = lazy(() => import('./features/activity/Activity.jsx'));
+/** Active screen + shell. Reads shared state from context and hands it to the routed screen. */
+function AppRoutes() {
+  const { state, metrics, actions: rawActions } = useFinanceContext();
+  const { notify } = useToast();
+  const actions = useFeedbackActions(rawActions, notify);
+  const [view, navigate] = useHashRoute();
+  const Screen = ROUTES[view];
 
-export default function App() {
-  const { state, metrics, actions } = useFinance();
-  const [view, setView] = useState('home');
-
-  const screens = {
-    home: <Dashboard state={state} metrics={metrics} actions={actions} />,
-    simulate: <Simulator state={state} metrics={metrics} actions={actions} onDone={() => setView('home')} />,
-    subscriptions: <Subscriptions state={state} metrics={metrics} actions={actions} />,
-    goals: <Goals state={state} metrics={metrics} actions={actions} />,
-    insights: <Insights state={state} metrics={metrics} />,
-    activity: <Activity state={state} actions={actions} />,
-  };
+  useEffect(prefetchRoutes, []);
+  const goHome = useCallback(() => navigate('home'), [navigate]);
 
   return (
-    <AppShell view={view} onNavigate={setView} state={state} metrics={metrics}>
-      <Suspense fallback={<p className="muted loading" role="status" aria-busy="true">Loading…</p>}>{screens[view]}</Suspense>
+    <AppShell view={view} onNavigate={navigate} state={state}>
+      <Suspense fallback={<Skeleton />}>
+        <Screen state={state} metrics={metrics} actions={actions} onDone={goHome} />
+      </Suspense>
     </AppShell>
+  );
+}
+
+/** Composition root: providers wrap the routed app. */
+export default function App() {
+  return (
+    <ToastProvider>
+      <FinanceProvider>
+        <AppRoutes />
+      </FinanceProvider>
+    </ToastProvider>
   );
 }

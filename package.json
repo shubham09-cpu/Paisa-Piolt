@@ -1,28 +1,53 @@
 {
   "name": "paisa-pilot",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
-  "description": "Gen Z personal finance simulator: survive a \u20b910,000 month with connected, simulated decisions.",
+  "description": "Gen Z personal finance simulator: survive a ₹10,000 month with connected, simulated decisions.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "npm run test:unit && npm run test:ui",
-    "test:unit": "node --test src/lib/finance.test.js src/lib/sanitize.test.js src/state/reducer.test.js",
-    "test:ui": "vitest run"
+    "test:unit": "node --test src/lib/finance.test.js src/lib/sanitize.test.js src/state/reducer.test.js src/services/storage.test.js src/hooks/routing.test.js",
+    "test:ui": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm run format:check && npm test && npm run build"
   },
   "dependencies": {
+    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
     "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^9.39.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^17.13.0",
     "jsdom": "^25.0.1",
+    "prettier": "^3.9.10",
     "vite": "^5.4.10",
     "vitest": "^2.1.4"
-  }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "vite",
+    "personal-finance",
+    "simulator",
+    "accessibility",
+    "pwa"
+  ]
 }

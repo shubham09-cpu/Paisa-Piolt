@@ -22,7 +22,10 @@ test('income raises balance and only whitelisted sources are stored', () => {
   const next = reduce(fresh(), { type: 'ADD_INCOME', amount: 500, source: 'Freelance' });
   assert.equal(next.balance, 10500);
   assert.equal(next.transactions[0].label, 'Freelance');
-  assert.equal(reduce(fresh(), { type: 'ADD_INCOME', amount: 1, source: '<b>x</b>' }).transactions[0].label, 'Other income');
+  assert.equal(
+    reduce(fresh(), { type: 'ADD_INCOME', amount: 1, source: '<b>x</b>' }).transactions[0].label,
+    'Other income',
+  );
 });
 
 test('advancing a day charges bills due that day', () => {
@@ -48,7 +51,10 @@ test('surprise can be paid from the emergency fund', () => {
 test('committing an invalid decision does nothing', () => {
   const state = fresh();
   assert.equal(reduce(state, { type: 'COMMIT_DECISION', decision: { type: 'hack', amount: 100 } }), state);
-  assert.equal(reduce(state, { type: 'COMMIT_DECISION', decision: { type: 'goal', amount: 100, goalId: 'nope' } }), state);
+  assert.equal(
+    reduce(state, { type: 'COMMIT_DECISION', decision: { type: 'goal', amount: 100, goalId: 'nope' } }),
+    state,
+  );
 });
 
 test('reset returns a fresh month', () => {

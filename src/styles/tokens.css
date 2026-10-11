@@ -1,5 +1,6 @@
 /* Design tokens: colours, spacing, radii. Light by default, dark via OS or manual toggle. */
 :root {
+  color-scheme: light dark;
   --bg: #f5f4fb;
   --surface: #ffffff;
   --text: #17142b;
@@ -7,21 +8,49 @@
   --border: #e4e1f2;
   --brand: #6c4cff;
   --brand-2: #ff4fa3;
-  --good: #0e8f5e;
-  --warn: #b97800;
+  --good: #0b7a50;
+  --warn: #9a6400;
   --bad: #d22f45;
   --focus: #6c4cff;
   --radius: 18px;
   --gap: 14px;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --brand-text: #5b3bf0;
+  --shadow: 0 1px 2px rgb(23 20 43 / 0.06), 0 4px 16px rgb(23 20 43 / 0.05);
+  --shadow-lg: 0 8px 28px rgb(23 20 43 / 0.18);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nav-h: 64px;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0f0d1c; --surface: #1a1730; --text: #f1effc; --muted: #a29fbf; --border: #2d2a4c;
-    --good: #3ddc97; --warn: #ffc247; --bad: #ff6b81; --focus: #a594ff;
+  :root:not([data-theme='light']) {
+    --bg: #0f0d1c;
+    --surface: #1a1730;
+    --text: #f1effc;
+    --muted: #a29fbf;
+    --border: #2d2a4c;
+    --good: #3ddc97;
+    --warn: #ffc247;
+    --bad: #ff6b81;
+    --focus: #a594ff;
+    --brand-text: #b3a5ff;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.3);
   }
 }
-:root[data-theme="dark"] {
-  --bg: #0f0d1c; --surface: #1a1730; --text: #f1effc; --muted: #a29fbf; --border: #2d2a4c;
-  --good: #3ddc97; --warn: #ffc247; --bad: #ff6b81; --focus: #a594ff;
+/* Manual override when the toggle forces a theme (the key colours repeat on purpose: media queries can't be shared). */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --brand-text: #b3a5ff;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.3);
+  --bg: #0f0d1c;
+  --surface: #1a1730;
+  --text: #f1effc;
+  --muted: #a29fbf;
+  --border: #2d2a4c;
+  --good: #3ddc97;
+  --warn: #ffc247;
+  --bad: #ff6b81;
+  --focus: #a594ff;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
 }
