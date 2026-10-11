@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { TOTAL_DAYS } from '../../data/constants.js';
 import PropTypes from 'prop-types';
 
+/** Time-travel buttons (+1 / +7 days) and the surprise-expense trigger. */
 function DayControls({ day, onAdvance, onSurprise }) {
   const finished = day >= TOTAL_DAYS;
   return (

@@ -4,6 +4,7 @@ import HealthRing from '../../components/ui/HealthRing.jsx';
 import { healthLevel, riskLevel } from '../../lib/finance.js';
 import { metricsShape } from '../../types.js';
 
+/** Financial health label, risk level and the health ring. */
 function ScoreCard({ metrics }) {
   const health = healthLevel(metrics.health);
   const risk = riskLevel(metrics.risk);

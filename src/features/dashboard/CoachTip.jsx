@@ -3,6 +3,7 @@ import Card from '../../components/ui/Card.jsx';
 import { buildCoachTip } from '../../lib/finance.js';
 import { metricsShape } from '../../types.js';
 
+/** One actionable sentence generated from the current metrics (announced politely to screen readers). */
 function CoachTip({ metrics }) {
   const tip = buildCoachTip(metrics);
   return (

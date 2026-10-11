@@ -5,6 +5,7 @@ import { formatINR } from '../../utils/format.js';
 import PropTypes from 'prop-types';
 import { actionsShape, goalShape, metricsShape, stateShape } from '../../types.js';
 
+/** One savings goal: progress bar, quick +₹100 / +₹500 buttons and a custom amount form. */
 function GoalCard({ goal, onSave }) {
   const done = goal.saved >= goal.target;
 
@@ -43,6 +44,7 @@ function GoalCard({ goal, onSave }) {
   );
 }
 
+/** Savings goals screen: totals plus one card per goal. */
 export default function Goals({ state, metrics, actions }) {
   return (
     <div className="stack">

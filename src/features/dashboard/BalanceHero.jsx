@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { formatINR } from '../../utils/format.js';
 import PropTypes from 'prop-types';
 
+/** Hero card: current balance, safe-to-spend today, bills ahead and days left. */
 function BalanceHero({ balance, allowance, upcoming, daysLeft }) {
   return (
     <section className="hero" aria-label="Balance summary">

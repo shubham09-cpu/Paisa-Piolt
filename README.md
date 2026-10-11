@@ -11,6 +11,8 @@ A frontend-only personal finance simulator for Gen Z. You get a ₹10,000 budget
 
 Problem statement: _Broke But Functional — Survive the Month_.
 
+**🚀 Live demo: [paisa-piolt.vercel.app](https://paisa-piolt.vercel.app/)** · **Source: [github.com/shubham09-cpu/paisa-piolt](https://github.com/shubham09-cpu/paisa-piolt)**
+
 |                                        Mobile                                         |                                         Desktop                                          |
 | :-----------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
 | <img src="docs/screenshots/home-mobile.png" alt="Home screen on a phone" width="260"> | <img src="docs/screenshots/home-desktop.png" alt="Home screen on a desktop" width="520"> |
@@ -21,6 +23,7 @@ Problem statement: _Broke But Functional — Survive the Month_.
 
 ## Table of contents
 
+- [Live demo](#live-demo)
 - [Features](#features)
 - [How the numbers connect](#how-the-numbers-connect)
 - [Tech stack](#tech-stack)
@@ -31,7 +34,12 @@ Problem statement: _Broke But Functional — Survive the Month_.
 - [Deploy](#deploy)
 - [Troubleshooting & FAQ](#troubleshooting--faq)
 - [More documentation](#more-documentation)
+- [Author](#author)
 - [License](#license)
+
+## Live demo
+
+Open **[paisa-piolt.vercel.app](https://paisa-piolt.vercel.app/)** on any device. It works offline after the first visit and can be installed to a phone home screen. Deep links work too, for example [`/#/simulate`](https://paisa-piolt.vercel.app/#/simulate).
 
 ## Features
 
@@ -87,7 +95,7 @@ No runtime dependencies other than React and `prop-types`.
 Requirements: **Node.js 18 or newer** and npm.
 
 ```bash
-git clone <your-fork-url> paisa-pilot
+git clone https://github.com/shubham09-cpu/paisa-piolt.git paisa-pilot
 cd paisa-pilot
 npm install
 npm run dev        # http://localhost:5173
@@ -200,6 +208,10 @@ For other static hosts, run `npm run build` and upload `dist/`. To serve from a 
 - [Testing](docs/TESTING.md): strategy and how to add tests
 - [Performance](docs/PERFORMANCE.md): bundle sizes, techniques and budgets
 - [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
+
+## Author
+
+Built by **Shubham Gupta** ([@shubham09-cpu](https://github.com/shubham09-cpu)) for the Frontend Arena challenge _Broke But Functional — Survive the Month_.
 
 ## License
 

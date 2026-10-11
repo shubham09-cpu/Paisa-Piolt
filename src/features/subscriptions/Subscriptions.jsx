@@ -3,6 +3,7 @@ import Switch from '../../components/ui/Switch.jsx';
 import { formatINR } from '../../utils/format.js';
 import { actionsShape, metricsShape, stateShape } from '../../types.js';
 
+/** Fixed commitments plus subscription switches; toggling one updates every metric. */
 export default function Subscriptions({ state, metrics, actions }) {
   return (
     <div className="stack">

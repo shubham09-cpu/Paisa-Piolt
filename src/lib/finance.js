@@ -23,12 +23,14 @@ export function getBillsDueToday(state) {
   return getAllBills(state).filter((bill) => bill.day === state.day);
 }
 
+/** Map a 0-100 risk score to a label and tone. */
 export function riskLevel(score) {
   if (score < 30) return { label: 'Low', tone: 'good' };
   if (score < 60) return { label: 'Medium', tone: 'warn' };
   return { label: 'High', tone: 'bad' };
 }
 
+/** Map a 0-100 health score to a label and tone. */
 export function healthLevel(score) {
   if (score >= 70) return { label: 'Thriving', tone: 'good' };
   if (score >= 45) return { label: 'Okay', tone: 'warn' };
@@ -174,6 +176,7 @@ export function applyDecision(state, { type, amount, goalId }) {
   }
 }
 
+/** Safe / Tight / Not-now verdict for a set of metrics (used by the simulator). */
 export function getVerdict(metrics) {
   if (metrics.risk >= 60 || metrics.forecast < 0)
     return { tone: 'bad', text: 'Not now. This pushes you into the danger zone.' };

@@ -16,6 +16,7 @@ function Row({ label, before, after, format = (v) => v, lowerIsBetter = false })
   );
 }
 
+/** Accessible table comparing metrics before and after a simulated decision. */
 export default function ImpactTable({ result }) {
   const { before, after, balanceBefore, balanceAfter } = result;
   return (
